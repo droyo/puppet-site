@@ -13,4 +13,9 @@ class gogive(
   file {'/etc/gogive.conf':
     content => template('gogive/gogive.conf.erb'),
   }
+  upstart::service{'gogive':
+    ensure => running,
+    content => template('gogive/gogive.upstart.erb'),
+    require => Golang::Get['github.com/droyo/gogive'],
+  }
 }

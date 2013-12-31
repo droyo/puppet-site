@@ -1,0 +1,15 @@
+# gogive - Server for golang import paths
+
+start on runlevel [2345]
+stop on shutdown
+
+respawn
+script
+  set -e
+  mkfifo /tmp/gogive-log-fifo
+  ( logger -t gogive </tmp/gogive-log-fifo & )
+  exec >/tmp/gogive-log-fifo 2>&1
+  rm /tmp/gogive-log-fifo
+  cd /web
+  exec /usr/local/bin/setuidgid.py nobody /usr/local/bin/gogive -a :<%= @port %> /etc/gogive.conf
+end script
