@@ -1,0 +1,7 @@
+description "Go import path tool"
+
+start on runlevel [12345]
+stop on runlevel [016]
+
+exec setuidgid nobody /usr/local/bin/gogive -a :9265 /etc/gogive.conf
+respawn

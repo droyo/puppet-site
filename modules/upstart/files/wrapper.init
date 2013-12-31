@@ -1,0 +1,7 @@
+#!/bin/sh
+# This is a wrapper script for an upstart job. The real
+# script lives in /etc/init/$0
+prog=`basename "$0"`
+cmd="$1"
+
+exec initctl "$1" "$prog"

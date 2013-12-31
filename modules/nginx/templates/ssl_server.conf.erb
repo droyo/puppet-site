@@ -1,0 +1,33 @@
+server {
+    listen       <%= @listen %> ssl;
+    server_name  <%= @server_name %>;
+
+    root <%= @root %>;
+
+    ssl_certificate      <%= @ssl_certificate %>;
+    ssl_certificate_key  <%= @ssl_certificate_key %>;
+    ssl_dhparam          /etc/pki/tls/private/nginx-dhparam.pem;
+    ssl_trusted_certificate <%= @ssl_trusted_certificate %>;
+
+    ssl_session_timeout  <%= @ssl_session_timeout %>;
+    ssl_session_cache <%= @ssl_session_cache %>;
+    ssl_protocols <%= @ssl_protocols.join(' ') %>;
+
+    ssl_ciphers '<%= @ssl_ciphers.join(':') %>';
+    # HSTS
+    add_header Strict-Transport-Security max-age=15768000;
+
+    ssl_prefer_server_ciphers   on;
+
+    ssl_stapling <%= @ssl_stapling ? 'on' : 'off' %>;
+    ssl_stapling_verify <%= @ssl_stapling_verify ? 'on': 'off' %>;
+
+    resolver <%= @resolver %>;
+<% @error_page.keys.sort.each do |code| -%>
+    error_page <%= code %> = <%= @error_page[code] %>;
+<% end -%>
+<% @locations.keys.sort.each do |path| -%>
+    location <%= path %> {<%= @locations[path] %>
+    }
+    <% end %>
+}

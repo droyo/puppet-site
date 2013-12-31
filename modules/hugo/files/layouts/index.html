@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>aqwari.net</title>
+    <meta charset="utf-8">
+    <base href="{{ .Site.BaseUrl }}">
+    <link rel="canonical" href="{{ .Permalink }}">
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+    {{ if .RSSlink }}<link href="{{ .RSSlink }}" rel="alternate" type="application/rss+xml" title="{{ .Title }}" />{{ end }}
+  </head>
+  <body>
+    <ul class="toc">
+{{range .Data.Pages}}
+      <li><a href="{{.Permalink}}">{{.Title}}</a><span class="toc-when"> {{.Date.Format "Jan 2006"}}</span>
+        <div class="toc-summary">{{.Description}}</div>
+      </li>
+{{end}}
+    </ul>
+  </body>
+</html>

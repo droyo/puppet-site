@@ -1,0 +1,7 @@
+server {
+    listen       <%= @listen %>;
+    server_name  <%= @server_name %>;
+<% if @redirect -%>
+    return 301 <%= @redirect %>
+<%end -%>
+}

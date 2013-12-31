@@ -1,0 +1,28 @@
+ssl_cert = <<%= @ssl_cert %>
+ssl_key = <<%= @ssl_key %>
+auth_mechanisms = <%= @auth_mech.join(' ') %>
+mail_location =  'maildir:~/mail'
+
+mbox_write_locks = fcntl
+passdb {
+  driver = pam
+}
+passdb {
+  driver = pam
+}
+protocols = imap
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    group = postfix
+    mode = 0660
+    user = postfix
+  }
+  user = root
+}
+
+userdb {
+  driver = passwd
+}
+userdb {
+  driver = passwd
+}

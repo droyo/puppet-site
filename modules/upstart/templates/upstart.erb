@@ -1,0 +1,27 @@
+# <%= @title %><% if @desc %> - <%= @desc %><% end %>
+
+start on runlevel [2345]
+stop on shutdown
+<% Array(@environment).each do |var| -%>
+env <%= var %>
+export <%= var.split('=')[0] %>
+<% end -%>
+
+<% if @respawn -%>
+respawn
+<%end -%>
+script
+<% if @directory %>cd <%= @directory %>
+<% end -%>
+<% if @umask %>umask <%= @umask %>
+<% end -%>
+<% if @user and @group and @secondary_groups -%>
+exec /usr/local/bin/setuidgid.py  -g <%= @group %>  -G <%= @secondary_groups.join(',') %>  <%= @user %> <%= @command %>
+<% elsif @user and @group -%>
+exec /usr/local/bin/setuidgid.py -g <%= @group %> <%= @user %> <%= @command %>
+<% elsif @user -%>
+exec /usr/local/bin/setuidgid.py <%= @user %> <%= @command %>
+<% else -%>
+exec <%= @command %>
+<% end -%>
+end script

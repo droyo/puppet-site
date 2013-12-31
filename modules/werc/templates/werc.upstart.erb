@@ -1,0 +1,17 @@
+# werc - A sane web anti-framework
+
+start on runlevel [2345]
+stop on shutdown
+env PLAN9=<%= scope.lookupvar('plan9port::basedir') %>
+export PLAN9
+
+respawn
+script
+  set -e
+  mkfifo /tmp/werc-log-fifo
+  ( logger -t werc </tmp/werc-log-fifo & )
+  exec >/tmp/werc-log-fifo 2>&1
+  rm /tmp/werc-log-fifo
+  cd /web
+  exec /usr/local/bin/setuidgid.py werc /usr/local/bin/cgd -f -c /web/bin/werc.rc
+end script
