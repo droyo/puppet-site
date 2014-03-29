@@ -2,7 +2,6 @@ ssl_cert = <<%= @ssl_cert %>
 ssl_key = <<%= @ssl_key %>
 auth_mechanisms = <%= @auth_mech.join(' ') %>
 mail_location =  'maildir:~/mail'
-mail_plugins = sieve
 
 mbox_write_locks = fcntl
 passdb {
@@ -13,6 +12,10 @@ passdb {
 }
 
 protocols = imap lmtp
+
+protocol lmtp {
+  mail_plugins = $mail_plugins sieve
+}
 
 service auth {
   unix_listener /var/spool/postfix/private/auth {
