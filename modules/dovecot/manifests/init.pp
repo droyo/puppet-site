@@ -21,11 +21,14 @@ class dovecot(
   
   package { 'dovecot':
     ensure => $version,
+  } ->
+  package { 'dovecot-pidgeonhole':
+    ensure => installed,
   }
   
   service {'dovecot':
     ensure => running,
     enable => true,
-    require => Package['dovecot'],
+    require => Package['dovecot','dovecot-pidgeonhole'],
   }
 }
