@@ -25,6 +25,24 @@ class dovecot(
   package { 'dovecot-pigeonhole':
     ensure => installed,
   }
+
+  @file{'/var/lib/dovecot/sieve':
+    ensure => directory,
+    owner => 'dovecot',
+    group => 'dovecot',
+    recurse => true,
+    purge => true,
+    require => Package['dovecot'],
+  }
+  exec{'compile sieve scripts':
+    refreshonly => true,
+    command => '/usr/bin/sievec /var/lib/dovecot/sieve',
+    logoutput => on_failure,
+  }
+
+  dovecot::sieve{'10-mailing-list':
+    source => 'puppet:///modules/dovecot/ml.sieve',
+  }
   
   service {'dovecot':
     ensure => running,

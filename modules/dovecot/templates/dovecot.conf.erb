@@ -17,6 +17,10 @@ protocol lmtp {
   mail_plugins = $mail_plugins sieve
 }
 
+plugin {
+  sieve_after = /var/lib/dovecot/sieve
+}
+
 service auth {
   unix_listener /var/spool/postfix/private/auth {
     group = postfix
