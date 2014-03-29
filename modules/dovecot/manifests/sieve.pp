@@ -17,6 +17,7 @@ define dovecot::sieve($source = undef, $content = undef) {
   }
 
   exec{"compile ${name}.sieve":
+    environment => ['HOME=/var/empty'],
     command => "/usr/bin/sievec ${src} ${bin}",
     creates => $bin,
     logoutput => on_failure,
