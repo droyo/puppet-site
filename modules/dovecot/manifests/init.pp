@@ -26,18 +26,17 @@ class dovecot(
     ensure => installed,
   }
 
+  @file{'/etc/dovecot/sieve':
+    ensure => directory,
+    owner => 'dovecot',
+    group => 'dovecot',
+    require => Package['dovecot'],
+  }
   @file{'/var/lib/dovecot/sieve':
     ensure => directory,
     owner => 'dovecot',
     group => 'dovecot',
-    recurse => true,
-    purge => true,
     require => Package['dovecot'],
-  }
-  exec{'compile sieve scripts':
-    refreshonly => true,
-    command => '/usr/bin/sievec /var/lib/dovecot/sieve',
-    logoutput => on_failure,
   }
 
   dovecot::sieve{'10-mailing-list':
