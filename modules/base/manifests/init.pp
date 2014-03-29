@@ -12,7 +12,10 @@ class base {
     group => 'web',
     mode => '2664',
   }
-  
+  augeas{'Disable root SSH login':
+    context => '/files/etc/ssh/sshd_config',
+    changes => 'set PermitRootLogin no',
+  }
   package {['mercurial','git','bzr','gcc']:
     ensure => latest,
   }
