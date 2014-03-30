@@ -65,5 +65,11 @@ node default {
         fastcgi_cache_use_stale error timeout invalid_header http_500;',
     },
   }
+
+  cron{'expunge old mailing list e-mails':
+    user => 'droyo',
+    command => 'doveadm expunge mailbox ml.% savedbefore 90d',
+    hour => 4,
+  }
 }
  
