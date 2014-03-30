@@ -4,12 +4,6 @@ auth_mechanisms = <%= @auth_mech.join(' ') %>
 mail_location =  'maildir:~/mail'
 
 mbox_write_locks = fcntl
-passdb {
-  driver = pam
-}
-passdb {
-  driver = pam
-}
 
 protocols = imap lmtp
 
@@ -33,6 +27,7 @@ service auth {
 userdb {
   driver = passwd
 }
-userdb {
-  driver = passwd
+
+passdb {
+  driver = pam
 }
