@@ -7,29 +7,29 @@ if exists "list-id" {
 	setflag "\\Seen";
 	if header :regex "list-id" "<([a-zA-Z0-9-]+)[.@]" {
 		set :lower "listname" "${1}";
-		fileinto "ml.${listname}";
+		fileinto :create "ml.${listname}";
 	} elsif header :regex "list-id" "^\\s*<?([a-zA-Z0-9]+)[.@]" {
 		set :lower "listname" "${1}";
-		fileinto "ml.${listname}";
+		fileinto :create "ml.${listname}";
 	} else {
-		fileinto "ml.unknown";
+		fileinto :create "ml.unknown";
 	}
 	stop;
 } elsif exists "x-list-id" {
 	setflag "\\Seen";
 	if header :regex "x-list-id" "<[a-zA-Z0-9-]+)\\\\." {
 		set :lower "listname" "${1}";
-		fileinto "ml.${listname}";
+		fileinto :create "ml.${listname}";
 	} else {
-		fileinto "ml.unknown";
+		fileinto :create "ml.unknown";
 	}
 	stop;
 } elsif exists "mailing-list" {
 	if header :regex "mailing-list" "([a-zA-Z0-9-]+)@" {
 		set :lower "listname" "${1}";
-		fileinto "ml.${listname}";
+		fileinto :create "ml.${listname}";
 	} else {
-		fileinto "ml.unknown";
+		fileinto :create "ml.unknown";
 	}
 	stop;
 } elsif exists "x-mailing-list" {
