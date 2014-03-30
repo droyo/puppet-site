@@ -1,7 +1,7 @@
 # Sieve filter for mailing lists; automatically identify
 # e-mails from a mailing list and store it in ml.<name>
 
-require ["fileinto", "envelope", "imap4flags", "regex", "variables"];
+require ["fileinto", "envelope", "imap4flags", "regex", "variables", "mailbox"];
 
 if exists "list-id" {
 	setflag "\\Seen";
