@@ -34,7 +34,8 @@ service lmtp {
 }
   
 userdb {
-  driver = passwd
+  driver = passwd-file
+  args = username_format=%n@aqwari.net /etc/passwd
 }
 
 passdb {
