@@ -32,12 +32,6 @@ class dovecot(
     group => 'dovecot',
     require => Package['dovecot'],
   }
-  @file{'/var/lib/dovecot/sieve':
-    ensure => directory,
-    owner => 'dovecot',
-    group => 'dovecot',
-    require => Package['dovecot'],
-  }
 
   dovecot::sieve{'10-mailing-list':
     source => 'puppet:///modules/dovecot/ml.sieve',

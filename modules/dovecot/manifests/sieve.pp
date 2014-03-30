@@ -1,9 +1,8 @@
 define dovecot::sieve($source = undef, $content = undef) {
-  realize File['/var/lib/dovecot/sieve']
   realize File['/etc/dovecot/sieve']
 
   $src = "/etc/dovecot/sieve/${name}.sieve"
-  $bin = "/var/lib/dovecot/sieve/${name}.svbin"
+  $bin = "/etc/dovecot/sieve/${name}.svbin"
 
   file{$src:
     owner => 'root',

@@ -34,8 +34,8 @@ service lmtp {
 }
   
 userdb {
-  driver = passwd
-  args = username_format=%n@%d /etc/passwd
+  driver = passwd-file
+  args = username_format=%n /etc/passwd
 }
 
 passdb {
