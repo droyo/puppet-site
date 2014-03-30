@@ -45,8 +45,4 @@ class dovecot(
     enable => true,
     require => Package['dovecot','dovecot-pigeonhole'],
   }
-  cron {'expunge trash e-mails':
-    user => 'root',
-    command => 'doveadm expunge -A mailbox Trash savedbefore 30d',
-  }
 }

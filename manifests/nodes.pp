@@ -66,6 +66,12 @@ node default {
     },
   }
 
+  cron{'expunge old trash e-mails':
+    user => 'droyo',
+    command => 'doveadm expunge mailbox Trash savedbefore 30d',
+    hour => 2,
+  }
+
   cron{'expunge old mailing list e-mails':
     user => 'droyo',
     command => 'doveadm expunge mailbox ml.% savedbefore 90d',
