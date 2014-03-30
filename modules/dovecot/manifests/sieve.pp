@@ -20,6 +20,6 @@ define dovecot::sieve($source = undef, $content = undef) {
     command => "/usr/bin/sievec ${src} ${bin}",
     creates => $bin,
     logoutput => on_failure,
-    require => File[$src, '/var/lib/dovecot/sieve'],
+    require => File[$src],
   }
 }
