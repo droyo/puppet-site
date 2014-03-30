@@ -42,6 +42,9 @@ class dovecot(
   dovecot::sieve{'10-mailing-list':
     source => 'puppet:///modules/dovecot/ml.sieve',
   }
+  dovecot::sieve{'05-spam-checker':
+    source => 'puppet:///modules/dovecot/spam.sieve',
+  }
   
   service {'dovecot':
     ensure => running,
