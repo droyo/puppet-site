@@ -8,6 +8,7 @@ mbox_write_locks = fcntl
 protocols = imap lmtp
 
 protocol lmtp {
+  postmaster_address = postmaster@aqwari.net
   mail_plugins = $mail_plugins sieve
 }
 
@@ -24,6 +25,14 @@ service auth {
   user = root
 }
 
+service lmtp {
+  unix_listener lmtp {
+    group = postfix
+    mode = 0660
+    user = postfix
+  }
+}
+  
 userdb {
   driver = passwd
 }
