@@ -11,7 +11,7 @@
 # }
 
 define upstart::service(
-  $ensure,
+  $ensure  = running,
   $desc    = false,
   $user    = false,
   $group   = false,
