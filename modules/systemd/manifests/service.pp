@@ -7,7 +7,8 @@ define systemd::service(
   $enable      = true,
   $description = "Service ${name}",
   $directory   = '/var/empty',
-  $restart     = false,
+  $respawn     = false,
+  $umask       = '022',
 ) {
   file{"/etc/systemd/system/${name}.service":
     owner   => 'root',

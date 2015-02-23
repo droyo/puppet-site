@@ -10,6 +10,7 @@ Group=<%= @group %>
 <% end -%>
 ExecStart=<%= @command %>
 WorkingDirectory=<%= @directory %>
+Umask=<%= @umask %>
 
 [Install]
 WantedBy=<%= @runlevel %>
