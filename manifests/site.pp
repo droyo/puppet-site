@@ -81,6 +81,7 @@ nginx::ssl_server{'www':
 }
 
 vcsrepo{'/srv/hugo':
+  ensure   => 'present',
   owner    => 'hugo',
   group    => 'hugo',
   provider => 'git',
