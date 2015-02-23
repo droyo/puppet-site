@@ -26,20 +26,15 @@ class hugo ($basedir = '/srv/www') {
     command   => 'git pull origin master',
   }
 
-  upstart::service {'hugo':
+  golang::get{'github.com/spf13/hugo':} ->
+  systemd::service {'hugo':
     ensure => running,
     desc => "Static site generator auto-generation",
     user => 'hugo',
     group => 'web',
     umask => '002',
-    respawn => true,
     directory => '/srv/hugo',
     command => '/usr/local/bin/hugo --watch',
-    require => [
-      Golang::Get['github.com/spf13/hugo'],
-      User[hugo],
-      Group[web],
-      File['/web/static','/web/layouts','/web/content','/web/public'],
-    ]
+    require => File['/srv/www', '/srv/hugo'],
   }
 }

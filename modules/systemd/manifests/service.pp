@@ -19,4 +19,12 @@ define systemd::service(
     ensure => $ensure,
     enable => $enable,
   }
+  
+  # Autorequire user/group resources.
+  if @user {
+    User<|title == @user|> -> File["/etc/systemd/system/${name}.service"]
+  }
+  if @group {
+    Group<|title == @group|> -> File["/etc/systemd/system/${name}.service"]
+  }
 }
