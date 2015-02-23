@@ -1,5 +1,6 @@
 class gogive(
   $port,
+  $addr = ''
   $paths = {},
 ) {
   include golang
@@ -17,7 +18,7 @@ class gogive(
     enable  => true,
     user    => 'nobody',
     group   => 'nobody',
-    command => "gogive -a :${port} /etc/gogive.conf",
+    command => "/usr/local/bin/gogive -a ${addr}:${port} /etc/gogive.conf",
     require => Golang::Get['github.com/droyo/gogive'],
   }
 }

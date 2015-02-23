@@ -1,7 +1,7 @@
 define webhook::hook(
   $port,
   $command,
-  $addr = $::ipaddress,
+  $addr = '',
   $user   = 'nobody',
   $group  = 'nobody',
   $directory = '/var/empty',
@@ -26,5 +26,6 @@ define webhook::hook(
         '-a <%= Shellwords.escape("#{@addr}:#{@port}") %> ',
         '-f <%= Shellwords.escape(@filter) %> ',
         '<%= @command %>'),
+    require => Golang::Get['github.com/droyo/webhook'],
   }
 }
