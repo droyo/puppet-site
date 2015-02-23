@@ -21,10 +21,10 @@ define systemd::service(
   }
   
   # Autorequire user/group resources.
-  if @user {
+  if $user {
     User<|title == @user|> -> File["/etc/systemd/system/${name}.service"]
   }
-  if @group {
+  if $group {
     Group<|title == @group|> -> File["/etc/systemd/system/${name}.service"]
   }
 }
