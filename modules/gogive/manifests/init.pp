@@ -1,6 +1,6 @@
 class gogive(
   $port,
-  $addr = ''
+  $addr = '',
   $paths = {},
 ) {
   include golang
