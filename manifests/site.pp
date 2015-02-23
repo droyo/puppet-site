@@ -81,11 +81,11 @@ nginx::ssl_server{'www':
 }
 
 vcsrepo{'/srv/hugo':
-  owner => 'root',
-  group => 'web',
-  mode => '2775',
+  owner    => 'hugo',
+  group    => 'hugo',
+  mode     => '2775',
   provider => 'git',
-  source => 'git://github.com/droyo/blog.git',
+  source   => 'git://github.com/droyo/blog.git',
 }
 
 Vcsrepo['/srv/hugo'] -> Class['hugo']
