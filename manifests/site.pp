@@ -21,6 +21,8 @@ resources {'firewall':
 }
 
 include base
+include firewall
+
 class{'golang':
   path => '/usr/local/go',
 }
