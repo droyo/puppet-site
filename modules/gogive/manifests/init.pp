@@ -17,7 +17,7 @@ class gogive(
     enable  => true,
     user    => 'nobody',
     group   => 'nobody',
-    command => "${golang::path}/bin/gogive -a :${port} /etc/gogive.conf",
+    command => "gogive -a :${port} /etc/gogive.conf",
     require => Golang::Get['github.com/droyo/gogive'],
   }
 }
