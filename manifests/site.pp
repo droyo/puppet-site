@@ -88,6 +88,7 @@ vcsrepo{'/srv/hugo':
   group    => 'hugo',
   provider => 'git',
   source   => 'git://github.com/droyo/blog.git',
+  require  => Class['hugo::user'],
 }
 
 Vcsrepo['/srv/hugo'] -> Class['hugo']

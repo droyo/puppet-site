@@ -1,12 +1,7 @@
 class hugo ($basedir = '/srv/www') {
   require golang
-  user {'hugo':
-    home => '/var/empty',
-    shell => '/sbin/nologin',
-    tag => 'web',
-  }
-  group {'hugo':}
-  
+  include hugo::user
+    
   file {['/srv/hugo', '/srv/www']:
     ensure => 'directory',
     owner  => 'root',
