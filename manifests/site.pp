@@ -58,19 +58,10 @@ nginx::redirect{'https':
   redirect => 'https://$host$request_uri;',
 }
 
-nginx::ssl_server{'blog':
-  server_name => 'blog.aqwari.net',
+nginx::ssl_server{'www':
+  server_name => 'blog.aqwari.net www.aqwari.net aqwari.net',
   listen => 443,
   root => '/srv/www',
-  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
-  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
-}
-
-nginx::ssl_server{'www':
-  server_name => 'www.aqwari.net aqwari.net',
-  listen => 443,
-  root => '/var/empty',
   ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
