@@ -12,8 +12,10 @@
 #   Default: running
 #
 class firewall (
-  $ensure = running
-) {
+  $ensure       = running,
+  $service_name = $::firewall::params::service_name,
+  $package_name = $::firewall::params::package_name,
+) inherits ::firewall::params {
   include firewall::pre
   include firewall::post
   
@@ -28,15 +30,16 @@ class firewall (
 
   case $::kernel {
     'Linux': {
-      class { "firewall::linux":
-        ensure => $ensure,
+      class { "${title}::linux":
+        ensure       => $ensure,
+        service_name => $service_name,
+        package_name => $package_name,
       }
     }
     default: {
       fail("${title}: Kernel '${::kernel}' is not currently supported")
     }
   }
-  
   Firewall <|tag != internal|> {
     before => Class['firewall::post'],
     require => Class['firewall::pre'],

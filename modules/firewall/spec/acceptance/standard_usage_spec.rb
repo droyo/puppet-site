@@ -1,8 +1,8 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 # Some tests for the standard recommended usage
-describe 'standard usage tests:' do
-  context 'standard 1' do
+describe 'standard usage tests:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+  it 'applies twice' do
     pp = <<-EOS
       class my_fw::pre {
         Firewall {
@@ -19,7 +19,12 @@ describe 'standard usage tests:' do
           iniface => 'lo',
           action  => 'accept',
         }->
-        firewall { '002 accept related established rules':
+        firewall { "0002 reject local traffic not on loopback interface":
+          iniface     => '! lo',
+          destination => '127.0.0.1/8',
+          action      => 'reject',
+        }->
+        firewall { '003 accept related established rules':
           proto   => 'all',
           ctstate => ['RELATED', 'ESTABLISHED'],
           action  => 'accept',
@@ -48,12 +53,10 @@ describe 'standard usage tests:' do
       }
     EOS
 
-    context puppet_apply(pp) do
-      its(:stderr) { should be_empty }
-      its(:exit_code) { should_not == 1 }
-      its(:refresh) { should be_nil }
-      its(:stderr) { should be_empty }
-      its(:exit_code) { should be_zero }
+    # Run it twice and test for idempotency
+    apply_manifest(pp, :catch_failures => true)
+    unless fact('selinux') == 'true'
+      apply_manifest(pp, :catch_changes => true)
     end
   end
 end

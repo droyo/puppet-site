@@ -1,16 +1,30 @@
 #!/usr/bin/env rspec
 
 require 'spec_helper'
-require 'puppet/provider/confine/exists'
+if Puppet.version < '3.4.0'
+  require 'puppet/provider/confine/exists'
+else
+  require 'puppet/confine/exists'
+end
 
 describe 'iptables provider detection' do
-  let(:exists) {
-    Puppet::Provider::Confine::Exists
-  }
+  if Puppet.version < '3.4.0'
+    let(:exists) {
+      Puppet::Provider::Confine::Exists
+    }
+  else
+    let(:exists) {
+      Puppet::Confine::Exists
+    }
+  end
 
   before :each do
     # Reset the default provider
     Puppet::Type.type(:firewall).defaultprovider = nil
+
+    # Stub confine facts
+    allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+    allow(Facter.fact(:operatingsystem)).to receive(:value).and_return('Debian')
   end
 
   it "should default to iptables provider if /sbin/iptables[-save] exists" do
@@ -22,7 +36,7 @@ describe 'iptables provider detection' do
 
     # Every other command should return false so we don't pick up any
     # other providers
-    allow(exists).to receive(:which).with() { |value|
+    allow(exists).to receive(:which) { |value|
       ! ["iptables","iptables-save"].include?(value)
     }.and_return false
 
@@ -44,7 +58,7 @@ describe 'iptables provider' do
   }
 
   before :each do
-    Puppet::Type::Firewall.stubs(:defaultprovider).returns provider
+    allow(Puppet::Type::Firewall).to receive(:defaultprovider).and_return provider
     allow(provider).to receive(:command).with(:iptables_save).and_return "/sbin/iptables-save"
 
     # Stub iptables version
@@ -69,6 +83,131 @@ describe 'iptables provider' do
     expect(provider.instances.length).to be_zero
   end
 
+  describe '#insert_order' do
+    let(:iptables_save_output) { [
+      '-A INPUT -s 8.0.0.2/32 -p tcp -m multiport --ports 100 -m comment --comment "100 test" -j ACCEPT',
+      '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 200 -m comment --comment "200 test" -j ACCEPT',
+      '-A INPUT -s 8.0.0.4/32 -p tcp -m multiport --ports 300 -m comment --comment "300 test" -j ACCEPT'
+    ] }
+    let(:resources) do
+      iptables_save_output.each_with_index.collect { |l,index| provider.rule_to_hash(l, 'filter', index) }
+    end
+    let(:providers) do
+      resources.collect { |r| provider.new(r) }
+    end
+    it 'understands offsets for adding rules to the beginning' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '001 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(1) # 1-indexed
+    end
+    it 'understands offsets for editing rules at the beginning' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '100 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(1)
+    end
+    it 'understands offsets for adding rules to the middle' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '101 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(2)
+    end
+    it 'understands offsets for editing rules at the middle' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '200 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(2)
+    end
+    it 'understands offsets for adding rules to the end' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '301 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(4)
+    end
+    it 'understands offsets for editing rules at the end' do
+      resource = Puppet::Type.type(:firewall).new({ :name => '300 test', })
+      allow(resource.provider.class).to receive(:instances).and_return(providers)
+      expect(resource.provider.insert_order).to eq(3)
+    end
+
+    context 'with unname rules between' do
+      let(:iptables_save_output) { [
+        '-A INPUT -s 8.0.0.2/32 -p tcp -m multiport --ports 100 -m comment --comment "100 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.2/32 -p tcp -m multiport --ports 150 -m comment --comment "150 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 200 -j ACCEPT',
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 250 -j ACCEPT',
+        '-A INPUT -s 8.0.0.4/32 -p tcp -m multiport --ports 300 -m comment --comment "300 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.4/32 -p tcp -m multiport --ports 350 -m comment --comment "350 test" -j ACCEPT',
+      ] }
+      it 'understands offsets for adding rules before unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '001 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(1)
+      end
+      it 'understands offsets for editing rules before unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '100 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(1)
+      end
+      it 'understands offsets for adding rules between managed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '120 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(2)
+      end
+      it 'understands offsets for adding rules between unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '151 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(3)
+      end
+      it 'understands offsets for adding rules after unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '351 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(7)
+      end
+    end
+
+    context 'with unname rules before and after' do
+      let(:iptables_save_output) { [
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 050 -j ACCEPT',
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 090 -j ACCEPT',
+        '-A INPUT -s 8.0.0.2/32 -p tcp -m multiport --ports 100 -m comment --comment "100 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.2/32 -p tcp -m multiport --ports 150 -m comment --comment "150 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 200 -j ACCEPT',
+        '-A INPUT -s 8.0.0.3/32 -p tcp -m multiport --ports 250 -j ACCEPT',
+        '-A INPUT -s 8.0.0.4/32 -p tcp -m multiport --ports 300 -m comment --comment "300 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.4/32 -p tcp -m multiport --ports 350 -m comment --comment "350 test" -j ACCEPT',
+        '-A INPUT -s 8.0.0.5/32 -p tcp -m multiport --ports 400 -j ACCEPT',
+        '-A INPUT -s 8.0.0.5/32 -p tcp -m multiport --ports 450 -j ACCEPT',
+      ] }
+      it 'understands offsets for adding rules before unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '001 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(1)
+      end
+      it 'understands offsets for editing rules before unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '100 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(3)
+      end
+      it 'understands offsets for adding rules between managed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '120 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(4)
+      end
+      it 'understands offsets for adding rules between unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '151 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(5)
+      end
+      it 'understands offsets for adding rules after unnamed rules' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '351 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(9)
+      end
+      it 'understands offsets for adding rules at the end' do
+        resource = Puppet::Type.type(:firewall).new({ :name => '950 test', })
+        allow(resource.provider.class).to receive(:instances).and_return(providers)
+        expect(resource.provider.insert_order).to eq(11)
+      end
+    end
+  end
+
   # Load in ruby hash for test fixtures.
   load 'spec/fixtures/iptables/conversion_hash.rb'
 
@@ -89,7 +228,7 @@ describe 'iptables provider' do
           it "the parameter '#{param_name.to_s}' should match #{param_value.inspect}" do
             # booleans get cludged to string "true"
             if param_value == true then
-              expect(resource[param_name]).to be_true
+              expect(resource[param_name]).to be_truthy
             else
               expect(resource[param_name]).to eq(data[:params][param_name])
             end
@@ -170,6 +309,31 @@ describe 'iptables provider' do
     it 'update_args should be an array' do
       expect(instance.update_args.class).to eq(Array)
     end
+
+    it 'fails when modifying the chain' do
+      expect { instance.chain = "OUTPUT" }.to raise_error(/is not supported/)
+    end
+  end
+
+  describe 'when inverting rules' do
+    let(:resource) {
+      Puppet::Type.type(:firewall).new({
+        :name  => '040 partial invert',
+        :table       => 'filter',
+        :action      => 'accept',
+        :chain       => 'nova-compute-FORWARD',
+        :source      => '0.0.0.0/32',
+        :destination => '255.255.255.255/32',
+        :sport       => ['! 78','79','http'],
+        :dport       => ['77','! 76'],
+        :proto       => 'udp',
+      })
+    }
+    let(:instance) { provider.new(resource) }
+
+    it 'fails when not all array items are inverted' do
+      expect { instance.insert }.to raise_error Puppet::Error, /but '79', '80' are not prefixed/
+    end
   end
 
   describe 'when deleting resources' do
@@ -205,15 +369,15 @@ describe 'ip6tables provider' do
   }
 
   before :each do
-    Puppet::Type::Firewall.stubs(:ip6tables).returns provider6
-    provider6.stubs(:command).with(:ip6tables_save).returns "/sbin/ip6tables-save"
+    allow(Puppet::Type::Firewall).to receive(:ip6tables).and_return provider6
+    allow(provider6).to receive(:command).with(:ip6tables_save).and_return "/sbin/ip6tables-save"
 
     # Stub iptables version
-    Facter.fact(:ip6tables_version).stubs(:value).returns("1.4.7")
+    allow(Facter.fact(:ip6tables_version)).to receive(:value).and_return '1.4.7'
 
-    Puppet::Util::Execution.stubs(:execute).returns ""
-    Puppet::Util.stubs(:which).with("ip6tables-save").
-      returns "/sbin/ip6tables-save"
+    allow(Puppet::Util::Execution).to receive(:execute).and_return ''
+    allow(Puppet::Util).to receive(:which).with("ip6tables-save").
+      and_return "/sbin/ip6tables-save"
   end
 
   it 'should be able to get a list of existing rules' do
@@ -224,9 +388,8 @@ describe 'ip6tables provider' do
   end
 
   it 'should ignore lines with fatal errors' do
-    Puppet::Util::Execution.stubs(:execute).with(['/sbin/ip6tables-save']).
-      returns("FATAL: Could not load /lib/modules/2.6.18-028stab095.1/modules.dep: No such file or directory")
-
+    allow(Puppet::Util::Execution).to receive(:execute).with(['/sbin/ip6tables-save']).
+      and_return("FATAL: Could not load /lib/modules/2.6.18-028stab095.1/modules.dep: No such file or directory")
     provider6.instances.length.should == 0
   end
 

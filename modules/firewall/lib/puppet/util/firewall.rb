@@ -77,14 +77,11 @@ module Puppet::Util::Firewall
       proto = 'tcp'
     end
 
-    if value.kind_of?(String)
-      if value.match(/^\d+(-\d+)?$/)
-        return value
-      else
-        return Socket.getservbyname(value, proto).to_s
-      end
+    m = value.to_s.match(/^(!\s+)?(\S+)/)
+    if m[2].match(/^\d+(-\d+)?$/)
+      return "#{m[1]}#{m[2]}"
     else
-      Socket.getservbyname(value.to_s, proto).to_s
+      return "#{m[1]}#{Socket.getservbyname(m[2], proto).to_s}"
     end
   end
 
@@ -114,6 +111,20 @@ module Puppet::Util::Firewall
 
     return nil if value.prefixlen == 0
     value.cidr
+  end
+
+  # Takes an address mask and converts the host portion to CIDR notation.
+  #
+  # This takes into account you can negate a mask but follows all rules
+  # defined in host_to_ip for the host/address part.
+  #
+  def host_to_mask(value)
+    match = value.match /(!)\s?(.*)$/
+    return host_to_ip(value) unless match
+
+    cidr = host_to_ip(match[2])
+    return nil if cidr == nil
+    "#{match[1]} #{cidr}"
   end
 
   # Validates the argument is int or hex, and returns valid hex
@@ -152,8 +163,13 @@ module Puppet::Util::Firewall
       end
     end
 
-    # Fedora 15 and newer use systemd for to persist iptable rules
+    # Fedora 15 and newer use systemd to persist iptable rules
     if os_key == 'RedHat' && Facter.value(:operatingsystem) == 'Fedora' && Facter.value(:operatingsystemrelease).to_i >= 15
+      os_key = 'Fedora'
+    end
+
+    # RHEL 7 and newer also use systemd to persist iptable rules
+    if os_key == 'RedHat' && ['RedHat','CentOS','Scientific','SL','SLC','Ascendos','CloudLinux','PSBM','OracleLinux','OVS','OEL','XenServer'].include?(Facter.value(:operatingsystem)) && Facter.value(:operatingsystemrelease).to_i >= 7
       os_key = 'Fedora'
     end
 
@@ -168,14 +184,18 @@ module Puppet::Util::Firewall
     when :Fedora
       case proto.to_sym
       when :IPv4
-        %w{/usr/libexec/iptables.init save}
+        %w{/usr/libexec/iptables/iptables.init save}
       when :IPv6
-        %w{/usr/libexec/ip6tables.init save}
+        %w{/usr/libexec/iptables/ip6tables.init save}
       end
     when :Debian
       case proto.to_sym
       when :IPv4, :IPv6
-        %w{/usr/sbin/service iptables-persistent save}
+        if (persist_ver and Puppet::Util::Package.versioncmp(persist_ver, '1.0') > 0)
+          %w{/usr/sbin/service netfilter-persistent save}
+        else
+          %w{/usr/sbin/service iptables-persistent save}
+        end
       end
     when :Debian_manual
       case proto.to_sym
