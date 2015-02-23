@@ -80,6 +80,14 @@ nginx::ssl_server{'www':
   },
 }
 
+vcsrepo{'/srv/hugo':
+  owner => 'root',
+  group => 'web',
+  mode => '2775',
+  provider => 'git',
+  source => 'git://github.com/droyo/blog.git',
+}
+
 cron{'expunge old trash e-mails':
   user => 'droyo',
   command => 'doveadm expunge mailbox Trash savedbefore 30d',
