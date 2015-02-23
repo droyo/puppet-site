@@ -1,5 +1,3 @@
-import "nodes"
-
 File {
   owner => 'root',
   group => 'root',
@@ -14,16 +12,7 @@ resources {'firewall':
   purge => true,
 }
 
-stage{'packages':
-  before => Stage['main'],
-}
-
-class {'packages':
-  stage => packages,
-}
-
 include base
-include plan9port
 include golang
 include hugo
 
