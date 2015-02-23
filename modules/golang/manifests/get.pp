@@ -3,7 +3,10 @@ define golang::get($binary = regsubst($name, '.*/', '')) {
   include golang
   
   exec {"go get ${name}":
-    environment => "GOBIN=${golang::path}",
+    environment => [
+        "GOPATH=${golang::path}",
+        "GOBIN=/usr/local/bin",
+    ],
     logoutput => on_failure,
     creates => "/usr/local/bin/${binary}",
     require => Package['git','mercurial','bzr', 'golang'],
