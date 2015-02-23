@@ -29,7 +29,7 @@ class hugo ($basedir = '/srv/www') {
   golang::get{'github.com/spf13/hugo':} ->
   systemd::service {'hugo':
     ensure => running,
-    desc => "Static site generator auto-generation",
+    description => "Static site generator auto-generation",
     user => 'hugo',
     group => 'web',
     umask => '002',
