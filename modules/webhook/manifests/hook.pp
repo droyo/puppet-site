@@ -1,7 +1,7 @@
 define webhook::hook(
   $port,
-  $addr,
   $command,
+  $addr = $::ipaddress,
   $user   = 'nobody',
   $group  = 'nobody',
   $directory = '/var/empty',
