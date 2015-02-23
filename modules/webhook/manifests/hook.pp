@@ -22,7 +22,7 @@ define webhook::hook(
     group       => $group,
     directory   => $directory,
     command     => inline_template('<% require "shellwords" -%>',
-        "${golang::path}/webhook ",
+        '/usr/local/bin/webhook ',
         '-a <%= Shellwords.escape("#{@addr}:#{@port}") %> ',
         '-f <%= Shellwords.escape(@filter) %> ',
         '<%= @command %>'),
