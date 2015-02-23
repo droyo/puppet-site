@@ -1,0 +1,15 @@
+[Unit]
+Description=<%= @description %>
+
+[Service]
+<% if @user -%>
+User=<%= @user %>
+<% end -%>
+<% if @group %>
+Group=<%= @group %>
+<% end -%>
+ExecStart=<%= @command %>
+WorkingDirectory=<%= @directory %>
+
+[Install]
+WantedBy=<%= @runlevel %>

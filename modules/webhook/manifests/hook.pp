@@ -16,12 +16,15 @@ define webhook::hook(
     action => accept,
   }
 
-  upstart::service{"webhook-${name}":
-    desc  => 'Github webhook receiver for $name',
-    user  => $user,
-    group => $group,
-    command => "${golang::gopath}/bin/webhook -a \"${addr}:${port}\" -f \"${filter}\" ${command}",
-    respawn => true,
-    directory => $directory,
+  systemd::service{"webhook-${name}":
+    description => 'Receive github webhook notifications',
+    user        => $user,
+    group       => $group,
+    directory   => $directory,
+    command     => inline_template('<% require "shellwords" -%>',
+        "${golang::path}/webhook ",
+        '-a <%= Shellwords.escape("#{@addr}:#{port}") %> ',
+        '-f <%= Shellwords.escape(@filter) %> ',
+        '<%= @command %>'),
   }
 }

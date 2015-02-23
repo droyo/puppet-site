@@ -1,11 +1,11 @@
 # Install a go program to /usr/local/bin
 define golang::get($binary = regsubst($name, '.*/', '')) {
-  require golang
+  include golang
   
-  exec {"${golang::basedir}/bin/go get ${name}":
-    environment => 'GOBIN=/usr/local/bin',
+  exec {"go get ${name}":
+    environment => "GOBIN=${golang::path}",
     logoutput => on_failure,
     creates => "/usr/local/bin/${binary}",
-    require => Package['git','mercurial','bzr'],
+    require => Package['git','mercurial','bzr', 'golang'],
   }
 }

@@ -16,7 +16,7 @@ class base {
     context => '/files/etc/ssh/sshd_config',
     changes => 'set PermitRootLogin no',
   }
-  package {['mercurial','git','bzr','gcc']:
+  package {['mercurial','git','bzr']:
     ensure => latest,
   }
   package {'w3m':

@@ -1,21 +1,23 @@
 class gogive(
   $port,
-  $paths
+  $paths = {},
 ) {
-  require golang
-  File {
+  include golang
+  
+  file {'/etc/gogive.conf':
     owner => 'root',
     group => 'root',
     mode => '0644',
-  }
-  
-  golang::get{'github.com/droyo/gogive':}
-  file {'/etc/gogive.conf':
     content => template('gogive/gogive.conf.erb'),
   }
-  upstart::service{'gogive':
-    ensure => running,
-    content => template('gogive/gogive.upstart.erb'),
+
+  golang::get{'github.com/droyo/gogive':}
+  systemd::service{'gogive':
+    ensure  => running,
+    enable  => true,
+    user    => 'nobody',
+    group   => 'nobody',
+    command => "${golang::path}/bin/gogive -a :${port} /etc/gogive.conf",
     require => Golang::Get['github.com/droyo/gogive'],
   }
 }
