@@ -83,7 +83,6 @@ nginx::ssl_server{'www':
 vcsrepo{'/srv/hugo':
   owner    => 'hugo',
   group    => 'hugo',
-  mode     => '2775',
   provider => 'git',
   source   => 'git://github.com/droyo/blog.git',
 }
