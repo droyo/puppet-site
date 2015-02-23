@@ -3,7 +3,7 @@ class golang(
 ) {
   include yumrepos::epel
   
-  package{$path:
+  file{$path:
     ensure => directory,
   }
   
