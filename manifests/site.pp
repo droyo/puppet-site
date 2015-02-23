@@ -68,13 +68,13 @@ nginx::ssl_server{'www':
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
   locations => {
-    '/artifactory-dircp' => '
+    'aqwari.net/artifactory-dircp' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
-    '/plumber-puppet' => '
+    'aqwari.net/plumber-puppet' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
-    '/golibs' => '
+    'aqwari.net/golibs' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
-    '/' => '
+    'aqwari.net/' => '
       proxy_set_header Host $host;
       if ($args = "go-get=1") {
           proxy_pass http://localhost:9265;
