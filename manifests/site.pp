@@ -88,6 +88,8 @@ vcsrepo{'/srv/hugo':
   source => 'git://github.com/droyo/blog.git',
 }
 
+Vcsrepo['/srv/hugo'] -> Class['hugo']
+
 cron{'expunge old trash e-mails':
   user => 'droyo',
   command => 'doveadm expunge mailbox Trash savedbefore 30d',
