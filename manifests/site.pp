@@ -78,9 +78,7 @@ nginx::ssl_server{'www':
         return 301 $scheme://blog.aqwari.net$request_uri;',
     '/' => '
       proxy_set_header Host $host;
-      if ($args = "go-get=1") {
-          proxy_pass http://localhost:9265;
-      }',
+      proxy_pass http://localhost:9265;',
   },
 }
 
