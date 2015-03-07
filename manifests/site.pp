@@ -62,24 +62,31 @@ nginx::redirect{'https':
   redirect => 'https://$host$request_uri;',
 }
 
-nginx::ssl_server{'www':
-  server_name => 'blog.aqwari.net www.aqwari.net aqwari.net',
+nginx::ssl_server{'gogive':
+  server_name => 'aqwari.net',
+  listen => 443,
+  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
+  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
+  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
+  locations => {
+    '/artifactory-dircp' => '
+        return 301 $scheme://blog.aqwari.net$request_uri;',
+    '/plumber-puppet' => '
+        return 301 $scheme://blog.aqwari.net$request_uri;',
+    '/golibs' => '
+        return 301 $scheme://blog.aqwari.net$request_uri;',
+    '/' => '
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:9265;',
+  },
+}
+nginx::ssl_server{'blog':
+  server_name => 'blog.aqwari.net',
   listen => 443,
   root => '/srv/www',
   ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
-  locations => {
-    'aqwari.net/artifactory-dircp' => '
-        return 301 $scheme://blog.aqwari.net$request_uri;',
-    'aqwari.net/plumber-puppet' => '
-        return 301 $scheme://blog.aqwari.net$request_uri;',
-    'aqwari.net/golibs' => '
-        return 301 $scheme://blog.aqwari.net$request_uri;',
-    'aqwari.net/' => '
-      proxy_set_header Host $host;
-      proxy_pass http://localhost:9265;',
-  },
 }
 
 vcsrepo{'/srv/hugo':
