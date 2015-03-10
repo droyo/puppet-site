@@ -70,11 +70,11 @@ nginx::ssl_server{'gogive':
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
   locations => {
-    '/artifactory-dircp' => '
+    '= /artifactory-dircp' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
-    '/plumber-puppet' => '
+    '= /plumber-puppet' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
-    '/golibs' => '
+    '= /golibs' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
     '= /' => '
       return 307 $scheme://blog.aqwari.net;',
