@@ -76,6 +76,8 @@ nginx::ssl_server{'gogive':
         return 301 $scheme://blog.aqwari.net$request_uri;',
     '/golibs' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
+    '= /' => '
+      return 307 $scheme://blog.aqwari.net;',
     '/' => '
       proxy_set_header Host $host;
       proxy_pass http://localhost:9265;',
