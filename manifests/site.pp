@@ -40,10 +40,10 @@ class{'gogive':
     '/exp/soap' => 'git git://github.com/droyo/go.soap.git',
     '/exp/display' => 'git git://github.com/droyo/go.display.git',
     '/exp/gl' => 'git git://github.com/droyo/go.gl.git',
+    '/exp/xml' => 'git git://github.com/droyo/go-xml.git',
     '/cmd/gogive' => 'git git://github.com/droyo/gogive.git',
     '/cmd/webhook' => 'git git://github.com/droyo/webhook.git',
     '/retry' => 'git git://github.com/droyo/retry.git',
-    '/xml' => 'git git://github.com/droyo/go-xml.git',
   },
 }
 class{'dovecot':
