@@ -36,6 +36,7 @@ class{'gogive':
   port => 9265,
   paths => {
     '/exp/ndb' => 'git git://github.com/droyo/go.ndb.git',
+    '/encoding/ndb' => 'git git://github.com/droyo/go.ndb.git',
     '/exp/soap' => 'git git://github.com/droyo/go.soap.git',
     '/exp/display' => 'git git://github.com/droyo/go.display.git',
     '/exp/gl' => 'git git://github.com/droyo/go.gl.git',
