@@ -92,6 +92,19 @@ nginx::ssl_server{'blog':
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
 }
+nginx::ssl_server{'camlistore':
+  server_name => 'camlistore.aqwari.net',
+  listen => 443,
+  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
+  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
+  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
+  locations => {
+      '/' => '
+        auth_pam    "User login";
+        auth_pam_service_name "camlistore";
+        proxy_pass http://localhost:3179;',
+  },
+}
 
 vcsrepo{'/srv/hugo':
   ensure   => 'present',
