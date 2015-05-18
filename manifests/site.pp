@@ -95,6 +95,7 @@ nginx::ssl_server{'blog':
 nginx::ssl_server{'camlistore':
   server_name => 'camlistore.aqwari.net',
   listen => 443,
+  root => '/var/empty',
   ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
   ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
