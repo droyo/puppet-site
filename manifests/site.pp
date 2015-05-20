@@ -101,8 +101,6 @@ nginx::ssl_server{'camlistore':
   ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
   locations => {
       '/' => '
-        auth_pam    "User login";
-        auth_pam_service_name "camlistore";
         proxy_pass http://localhost:3179;',
   },
 }
