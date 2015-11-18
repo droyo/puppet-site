@@ -44,7 +44,7 @@ class{'gogive':
     '/cmd/gogive' => 'git git://github.com/droyo/gogive.git',
     '/cmd/webhook' => 'git git://github.com/droyo/webhook.git',
     '/retry' => 'git git://github.com/droyo/retry.git',
-    '/net/styx' => 'git git://github.roving.com/droyo/styx.git',
+    '/net/styx' => 'git git://github.com/droyo/styx.git',
   },
 }
 class{'dovecot':
