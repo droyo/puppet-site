@@ -21,6 +21,11 @@ class postfix(
   file {'/etc/postfix/master.cf':
     content => template('postfix/master.cf.erb'),
   }
+  @firewall{'25 SMTP':
+    proto  => 'tcp',
+    port   => 25,
+    action => accept,
+  }
   service {'postfix':
     ensure => running,
     enable => true,
