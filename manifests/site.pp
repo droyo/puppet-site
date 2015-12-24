@@ -35,16 +35,16 @@ class{'nginx':
 class{'gogive':
   port => 9265,
   paths => {
-    '/exp/ndb' => 'git git://github.com/droyo/go.ndb.git',
-    '/encoding/ndb' => 'git git://github.com/droyo/go.ndb.git',
-    '/exp/soap' => 'git git://github.com/droyo/go.soap.git',
-    '/exp/display' => 'git git://github.com/droyo/go.display.git',
-    '/exp/gl' => 'git git://github.com/droyo/go.gl.git',
-    '/xml' => 'git git://github.com/droyo/go-xml.git',
-    '/cmd/gogive' => 'git git://github.com/droyo/gogive.git',
-    '/cmd/webhook' => 'git git://github.com/droyo/webhook.git',
-    '/retry' => 'git git://github.com/droyo/retry.git',
-    '/net/styx' => 'git git://github.com/droyo/styx.git',
+    '/exp/ndb' => 'git https://github.com/droyo/go.ndb',
+    '/encoding/ndb' => 'git https://github.com/droyo/go.ndb',
+    '/exp/soap' => 'git https://github.com/droyo/go.soap',
+    '/exp/display' => 'git https://github.com/droyo/go.display',
+    '/exp/gl' => 'git https://github.com/droyo/go.gl',
+    '/xml' => 'git https://github.com/droyo/go-xml',
+    '/cmd/gogive' => 'git https://github.com/droyo/gogive',
+    '/cmd/webhook' => 'git https://github.com/droyo/webhook',
+    '/retry' => 'git https://github.com/droyo/retry',
+    '/net/styx' => 'git https://github.com/droyo/styx',
   },
 }
 class{'dovecot':
