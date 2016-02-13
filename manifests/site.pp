@@ -81,6 +81,7 @@ nginx::ssl_server{'sandstorm':
   ssl_certificate_key => '/etc/ssl/private/nginx.key',
   hsts => true,
   client_body_max_size => '1024m',
+  root => '/var/empty',
   locations => {
     '/' => '
         proxy_pass http://127.0.0.1:6080;
