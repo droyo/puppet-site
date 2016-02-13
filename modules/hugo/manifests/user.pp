@@ -1,5 +1,5 @@
 class hugo::user {
-  private()
+  assert_private()
   user {'hugo':
     home => '/var/empty',
     shell => '/sbin/nologin',

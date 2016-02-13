@@ -1,11 +1,11 @@
 class nginx::config inherits nginx {
-  private()
-  @firewall {'301 HTTP':
+  assert_private()
+  @firewall {'300 HTTP':
     proto => 'tcp',
     port => 80,
     action => accept,
   }
-  @firewall {'302 HTTPS':
+  @firewall {'300 HTTPS':
     proto => 'tcp',
     port => 443,
     action => accept,
