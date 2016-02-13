@@ -13,12 +13,20 @@ class gogive(
   }
 
   golang::get{'github.com/droyo/gogive':}
-  systemd::service{'gogive':
-    ensure  => running,
-    enable  => true,
-    user    => 'nobody',
-    group   => 'nobody',
-    command => "/usr/local/bin/gogive -a ${addr}:${port} /etc/gogive.conf",
-    require => Golang::Get['github.com/droyo/gogive'],
+  if $::osfamily == 'Debian' {
+    upstart::service{'gogive':
+      ensure  => running,
+      content => template('gogive/gogive.upstart.erb'),
+      require => Golang::Get['github.com/droyo/gogive'],
+    }
+  } else {
+    systemd::service{'gogive':
+      ensure  => running,
+      enable  => true,
+      user    => 'nobody',
+      group   => 'nobody',
+      command => "/usr/local/bin/gogive -a ${addr}:${port} /etc/gogive.conf",
+      require => Golang::Get['github.com/droyo/gogive'],
+    }
   }
 }

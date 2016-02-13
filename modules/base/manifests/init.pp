@@ -22,13 +22,13 @@ class base {
   package {'w3m':
     ensure => installed,
   }
-  file {'/etc/pki/tls/certs/startss-chain.pem':
-    source => 'puppet:///modules/base/certs/startss-chain.pem',
-  }
-  file {'/etc/pki/tls/certs/nginx.pem':
+  file {'/etc/ssl/certs/nginx.pem':
     source => 'puppet:///modules/base/certs/nginx.pem',
   }
-  file {'/etc/pki/tls/private/nginx.pem':
+  file {'/etc/ssl/certs/nginx-chain.pem':
+    source => 'puppet:///modules/base/certs/nginx-chain.pem',
+  }
+  file {'/etc/ssl/private/nginx.pem':
     source => 'puppet:///modules/base/private/nginx.pem',
   }
   user {'droyo':

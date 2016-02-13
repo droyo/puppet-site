@@ -1,7 +1,10 @@
 class golang(
   $path = '/usr/local/go',
 ) {
-  include yumrepos::epel
+  if $::osfamily == 'RedHat' {
+    include yumrepos::epel
+    Class['yumrepos::epel'] -> Package['golang']
+  }
   
   file{$path:
     ensure => directory,
@@ -9,6 +12,5 @@ class golang(
   
   package{'golang':
     ensure => installed,
-    require => Class['yumrepos::epel'],
   }
 }

@@ -12,10 +12,10 @@ class nginx::config inherits nginx {
   }
   
   exec{'generate dhparam':
-    command => "openssl dhparam -out /etc/pki/tls/private/nginx-dhparam.pem -rand – ${dhparam_length}",
-    creates => '/etc/pki/tls/private/nginx-dhparam.pem',
+    command => "openssl dhparam -out /etc/ssl/private/nginx-dhparam.pem -rand – ${dhparam_length}",
+    creates => '/etc/ssl/private/nginx-dhparam.pem',
   } ->
-  file{'/etc/pki/tls/private/nginx-dhparam.pem':
+  file{'/etc/ssl/private/nginx-dhparam.pem':
     mode => '0600',
   }
   file {'/etc/nginx' :

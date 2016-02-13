@@ -3,6 +3,6 @@ class nginx::service {
   service {'nginx':
     ensure => running,
     enable => true,
-    require => File['/etc/pki/tls/private/nginx-dhparam.pem'],
+    require => File['/etc/ssl/private/nginx-dhparam.pem'],
   }
 }

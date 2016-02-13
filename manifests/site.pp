@@ -47,30 +47,20 @@ class{'gogive':
     '/net/styx' => 'git https://github.com/droyo/styx',
   },
 }
-class{'dovecot':
-  version => latest,
-}
-
-class{'postfix':
-  tls_cert => '/etc/pki/dovecot/certs/dovecot.pem',
-  tls_key => '/etc/pki/dovecot/private/dovecot.pem',
-  require => Class['dovecot'],
-}
-
 nginx::redirect{'https':
   root => '/var/empty',
   listen => 80,
-  server_name => 'www.aqwari.net aqwari.net',
+  server_name => '*.aqwari.net aqwari.net',
   redirect => 'https://$host$request_uri;',
 }
 
-nginx::ssl_server{'gogive':
+nginx::ssl_server{'root':
   server_name => 'aqwari.net',
   listen => 443,
   root => '/var/empty',
-  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
-  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
+  ssl_certificate => '/etc/ssl/certs/nginx.pem',
+  ssl_certificate_key => '/etc/ssl/private/nginx.pem',
+  ssl_trusted_certificate => '/etc/ssl/certs/startss-chain.pem',
   locations => {
     '= /artifactory-dircp' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
@@ -85,25 +75,29 @@ nginx::ssl_server{'gogive':
       proxy_pass http://localhost:9265;',
   },
 }
+nginx::ssl_server{'sandstorm':
+  listen => 443,
+  ssl_certificate => '/etc/ssl/certs/nginx.pem',
+  ssl_certificate_key => '/etc/ssl/private/nginx.key',
+  hsts => true,
+  client_max_body_size => '1024m',
+  locations => {
+    '/' => '
+        proxy_pass http://127.0.0.1:6080;
+	proxy_set_header Host $http_host;
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection $connection_upgrade;',
+  },
+}
+
 nginx::ssl_server{'blog':
   server_name => 'blog.aqwari.net',
   listen => 443,
   root => '/srv/www',
-  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
-  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
-}
-nginx::ssl_server{'camlistore':
-  server_name => 'camlistore.aqwari.net',
-  listen => 443,
-  root => '/var/empty',
-  ssl_certificate => '/etc/pki/tls/certs/nginx.pem',
-  ssl_certificate_key => '/etc/pki/tls/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/pki/tls/certs/startss-chain.pem',
-  locations => {
-      '/' => '
-        proxy_pass http://localhost:3179;',
-  },
+  ssl_certificate => '/etc/ssl/certs/nginx.pem',
+  ssl_certificate_key => '/etc/ssl/private/nginx.pem',
+  ssl_trusted_certificate => '/etc/ssl/certs/startss-chain.pem',
 }
 
 vcsrepo{'/srv/hugo':
@@ -116,15 +110,3 @@ vcsrepo{'/srv/hugo':
 }
 
 Vcsrepo['/srv/hugo'] -> Class['hugo']
-
-cron{'expunge old trash e-mails':
-  user => 'droyo',
-  command => 'doveadm expunge mailbox Trash savedbefore 30d',
-  hour => 2,
-}
-
-cron{'expunge old mailing list e-mails':
-  user => 'droyo',
-  command => 'doveadm expunge mailbox ml.% savedbefore 90d',
-  hour => 4,
-}
