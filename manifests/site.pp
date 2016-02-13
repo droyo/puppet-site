@@ -80,7 +80,7 @@ nginx::ssl_server{'sandstorm':
   ssl_certificate => '/etc/ssl/certs/nginx.pem',
   ssl_certificate_key => '/etc/ssl/private/nginx.key',
   hsts => true,
-  client_max_body_size => '1024m',
+  client_body_max_size => '1024m',
   locations => {
     '/' => '
         proxy_pass http://127.0.0.1:6080;
