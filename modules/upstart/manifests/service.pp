@@ -44,7 +44,7 @@ define upstart::service(
     require   => File['/usr/local/bin/setuidgid.py'],
   }
   
-  file {"/etc/rc.d/init.d/${title}":
+  file {"/etc/init.d/${title}":
     owner => 'root',
     group => 'root',
     mode  => '0755',
