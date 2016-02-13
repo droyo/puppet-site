@@ -21,7 +21,7 @@ class hugo ($basedir = '/srv/www') {
     command   => 'git pull origin master',
   }
 
-  golang::get{'github.com/spf13/hugo':} ->
+  golang::get{'github.com/spf13/hugo':}
   if $::osfamily == 'Debian' {
     upstart::service {'hugo':
       ensure => running,
