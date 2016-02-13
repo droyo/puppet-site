@@ -30,7 +30,7 @@ class hugo ($basedir = '/srv/www') {
       umask => '002',
       directory => '/srv/hugo',
       respawn => true,
-      command => 'hugo --watch',
+      command => '/usr/local/bin/hugo --watch',
       require => File['/srv/www', '/srv/hugo'],
     }
   } else {
