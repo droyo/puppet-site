@@ -21,7 +21,7 @@ define webhook::hook(
       desc  => 'Github webhook receiver for $name',
       user  => $user,
       group => $group,
-      command => "${golang::path}/bin/webhook -a \"${addr}:${port}\" -f \"${filter}\" ${command}",
+      command => "/usr/local/bin/webhook -a \"${addr}:${port}\" -f \"${filter}\" ${command}",
       respawn => true,
       directory => $directory,
     }
