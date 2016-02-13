@@ -22,14 +22,26 @@ class hugo ($basedir = '/srv/www') {
   }
 
   golang::get{'github.com/spf13/hugo':} ->
-  systemd::service {'hugo':
-    ensure => running,
-    description => "Static site generator auto-generation",
-    user => 'hugo',
-    group => 'web',
-    umask => '002',
-    directory => '/srv/hugo',
-    command => '/usr/local/bin/hugo --watch',
-    require => File['/srv/www', '/srv/hugo'],
+  if $::osfamily == 'Debian' {
+    upstart::service {'hugo':
+      ensure => running,
+      user => 'hugo',
+      group => 'web',
+      umask => '002',
+      directory => '/srv/hugo',
+      respawn => true,
+      command => 'hugo --watch',
+      require => File['/srv/www', '/srv/hugo'],
+  } else {
+    systemd::service {'hugo':
+      ensure => running,
+      description => "Static site generator auto-generation",
+      user => 'hugo',
+      group => 'web',
+      umask => '002',
+      directory => '/srv/hugo',
+      command => '/usr/local/bin/hugo --watch',
+      require => File['/srv/www', '/srv/hugo'],
+    }
   }
 }
