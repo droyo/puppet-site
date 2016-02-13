@@ -32,15 +32,15 @@ http {
     keepalive_timeout  <%= @keepalive_timeout %>;
 
     gzip  <%= @gzip ? 'on' : 'off' %>;
-    include /etc/nginx/conf.d/*.conf;
-}
+    # This magic stanza is ESSENTIAL to avoid breaking WebSockets.
+    #
+    # Specifically, for WebSocket forwarding, we want to forward the `Connection` header.
+    # This "map" declaration helps with that.
+    map $http_upgrade $connection_upgrade {
+      default upgrade;
+      ''      close;
+    }
 
-# This magic stanza is ESSENTIAL to avoid breaking WebSockets.
-#
-# Specifically, for WebSocket forwarding, we want to forward the `Connection` header.
-# This "map" declaration helps with that.
-map $http_upgrade $connection_upgrade {
-  default upgrade;
-  ''      close;
+    include /etc/nginx/conf.d/*.conf;
 }
 
