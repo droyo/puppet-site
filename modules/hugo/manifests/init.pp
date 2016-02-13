@@ -32,6 +32,7 @@ class hugo ($basedir = '/srv/www') {
       respawn => true,
       command => 'hugo --watch',
       require => File['/srv/www', '/srv/hugo'],
+    }
   } else {
     systemd::service {'hugo':
       ensure => running,
