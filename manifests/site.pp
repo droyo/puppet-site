@@ -60,7 +60,7 @@ nginx::ssl_server{'root':
   root => '/var/empty',
   ssl_certificate => '/etc/ssl/certs/nginx.pem',
   ssl_certificate_key => '/etc/ssl/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/ssl/certs/startss-chain.pem',
+  ssl_trusted_certificate => '/etc/ssl/certs/nginx-chain.pem',
   locations => {
     '= /artifactory-dircp' => '
         return 301 $scheme://blog.aqwari.net$request_uri;',
@@ -99,7 +99,7 @@ nginx::ssl_server{'blog':
   root => '/srv/www',
   ssl_certificate => '/etc/ssl/certs/nginx.pem',
   ssl_certificate_key => '/etc/ssl/private/nginx.pem',
-  ssl_trusted_certificate => '/etc/ssl/certs/startss-chain.pem',
+  ssl_trusted_certificate => '/etc/ssl/certs/nginx-chain.pem',
 }
 
 vcsrepo{'/srv/hugo':
