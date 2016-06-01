@@ -15,7 +15,12 @@ class hugo ($basedir = '/srv/www') {
     directory => '/srv/hugo',
     command   => 'git pull origin master',
   }
-
+  cron{'pull hugo updates':
+    minute  => '*/10',
+    command => '/bin/sh -c "cd /srv/hugo && git pull origin master | logger -t hugo"',
+    user    => 'hugo',
+  }
+  
   golang::get{'github.com/spf13/hugo':}
   if $::osfamily == 'Debian' {
     upstart::service {'hugo':
