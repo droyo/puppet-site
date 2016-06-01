@@ -96,7 +96,7 @@ nginx::ssl_server{'sandstorm':
 nginx::ssl_server{'blog':
   server_name => 'blog.aqwari.net',
   listen => 443,
-  root => '/srv/www',
+  root => '/srv/hugo/public',
   ssl_certificate => '/etc/ssl/certs/nginx.pem',
   ssl_certificate_key => '/etc/ssl/private/nginx.pem',
   ssl_trusted_certificate => '/etc/ssl/certs/nginx-chain.pem',
