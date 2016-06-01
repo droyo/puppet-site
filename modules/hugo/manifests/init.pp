@@ -17,7 +17,7 @@ class hugo ($basedir = '/srv/www') {
   }
   cron{'pull hugo updates':
     minute  => '*/10',
-    command => '/bin/sh -c "cd /srv/hugo && git pull origin master | logger -t hugo"',
+    command => '/bin/sh -c "cd /srv/hugo && git pull origin master 2>&1| logger -t hugo"',
     user    => 'hugo',
   }
   
