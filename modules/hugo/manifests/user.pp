@@ -2,7 +2,7 @@ class hugo::user {
   assert_private()
   user {'hugo':
     home => '/var/empty',
-    shell => '/sbin/nologin',
+    shell => '/bin/false',
     tag => 'web',
   }
   group {'hugo':}
