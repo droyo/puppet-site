@@ -8,11 +8,6 @@ class hugo ($basedir = '/srv/www') {
     group  => 'web',
     mode   => '2775',
   }
-  file {'/srv/hugo/public':
-    ensure => link,
-    target => '/srv/www',
-  }
-  
   webhook::hook{'hugo':
     user      => 'hugo',
     group     => 'web',
