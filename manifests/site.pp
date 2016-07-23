@@ -45,6 +45,7 @@ class{'gogive':
     '/cmd/webhook' => 'git https://github.com/droyo/webhook',
     '/retry' => 'git https://github.com/droyo/retry',
     '/net/styx' => 'git https://github.com/droyo/styx',
+    '/io/tailpipe' => 'git https://github.com/droyo/tailpipe',
   },
 }
 nginx::redirect{'https':
