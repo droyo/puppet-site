@@ -56,7 +56,7 @@ nginx::redirect{'https':
 }
 
 nginx::ssl_server{'root':
-  server_name => 'aqwari.net',
+  server_name => 'aqwari.net www.aqwari.net',
   listen => 443,
   root => '/var/empty',
   ssl_certificate => '/etc/ssl/certs/nginx.pem',
