@@ -1,5 +1,13 @@
 class profiles::ssl_webserver {  
-
+  file {'/etc/ssl/certs/nginx.pem':
+    source => 'puppet:///modules/base/certs/nginx.pem',
+  }
+  file {'/etc/ssl/certs/nginx-chain.pem':
+    source => 'puppet:///modules/base/certs/nginx-chain.pem',
+  }
+  file {'/etc/ssl/private/nginx.pem':
+    source => 'puppet:///modules/base/private/nginx.pem',
+  }
   class{'::nginx':
     dhparam_length => 2048,
   }

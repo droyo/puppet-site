@@ -16,20 +16,8 @@ class base {
     context => '/files/etc/ssh/sshd_config',
     changes => 'set PermitRootLogin no',
   }
-  package {['mercurial','git','bzr']:
-    ensure => latest,
-  }
-  package {'w3m':
+  package {'git':
     ensure => installed,
-  }
-  file {'/etc/ssl/certs/nginx.pem':
-    source => 'puppet:///modules/base/certs/nginx.pem',
-  }
-  file {'/etc/ssl/certs/nginx-chain.pem':
-    source => 'puppet:///modules/base/certs/nginx-chain.pem',
-  }
-  file {'/etc/ssl/private/nginx.pem':
-    source => 'puppet:///modules/base/private/nginx.pem',
   }
   user {'droyo':
     managehome => true,
