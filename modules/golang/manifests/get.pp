@@ -9,6 +9,6 @@ define golang::get($binary = regsubst($name, '.*/', '')) {
     ],
     logoutput => on_failure,
     creates => "/usr/local/bin/${binary}",
-    require => Package['git','mercurial','bzr', 'golang'],
+    require => Package['golang', 'git'],
   }
 }
