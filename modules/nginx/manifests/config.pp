@@ -14,13 +14,6 @@ class nginx::config inherits nginx {
     default  => 'nginx',
     'Debian' => 'www-data',
   }
-  exec{'generate dhparam':
-    command => "openssl dhparam -out /etc/ssl/private/nginx-dhparam.pem -rand – ${dhparam_length}",
-    creates => '/etc/ssl/private/nginx-dhparam.pem',
-  } ->
-  file{'/etc/ssl/private/nginx-dhparam.pem':
-    mode => '0600',
-  }
   file {'/etc/nginx' :
     ensure => directory,
   }

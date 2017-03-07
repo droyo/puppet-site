@@ -1,4 +1,6 @@
 class profiles::ssl_webserver {  
+  include ::nginx::dhparam
+  Class['::nginx::dhparam'] -> Class['::nginx::service']
   file {'/etc/ssl/certs/nginx.pem':
     source => 'puppet:///modules/base/certs/nginx.pem',
   }
