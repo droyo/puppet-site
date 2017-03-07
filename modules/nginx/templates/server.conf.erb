@@ -1,0 +1,18 @@
+server {
+    listen       <%= @listen %>;
+    server_name  <%= @server_name %>;
+
+    root <%= @root %>;
+
+<% if @client_body_max_size -%>
+    client_max_body_size <%= @client_body_max_size %>;
+<% end -%>
+    resolver <%= @resolver %>;
+<% @error_page.keys.sort.each do |code| -%>
+    error_page <%= code %> = <%= @error_page[code] %>;
+<% end -%>
+<% @locations.keys.sort.each do |path| -%>
+    location <%= path %> {<%= @locations[path] %>
+    }
+    <% end %>
+}
