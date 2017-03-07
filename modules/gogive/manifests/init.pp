@@ -13,7 +13,7 @@ class gogive(
   }
 
   golang::get{'github.com/droyo/gogive':}
-  if $::osfamily == 'Debian' {
+  if $::osfamily == 'Debian' and versioncmp($::operatingsystemrelease, 8) < 0 {
     upstart::service{'gogive':
       ensure  => running,
       content => template('gogive/gogive.upstart.erb'),
