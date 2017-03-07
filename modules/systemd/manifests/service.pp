@@ -6,7 +6,7 @@ define systemd::service(
   $ensure      = running,
   $enable      = true,
   $description = "Service ${name}",
-  $directory   = '/var/empty',
+  $directory   = undef,
   $respawn     = false,
   $umask       = '022',
 ) {
