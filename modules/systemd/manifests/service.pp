@@ -16,7 +16,7 @@ define systemd::service(
     mode    => '0755',
     content => template('systemd/service.erb'),
   } ~>
-  service{"${name}.service":
+  service{$name:
     ensure => $ensure,
     enable => $enable,
   }
