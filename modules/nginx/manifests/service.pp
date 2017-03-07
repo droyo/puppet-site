@@ -1,5 +1,4 @@
 class nginx::service {
-  assert_private()
   service {'nginx':
     ensure => running,
     enable => true,

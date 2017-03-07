@@ -1,5 +1,4 @@
 class nginx::config inherits nginx {
-  assert_private()
   @firewall {'300 HTTP':
     proto => 'tcp',
     port => 80,
