@@ -23,8 +23,8 @@ class gogive(
     systemd::service{'gogive':
       ensure  => running,
       enable  => true,
-      user    => 'nobody',
-      group   => 'nobody',
+      user    => 'daemon',
+      group   => 'daemon',
       command => "/usr/local/bin/gogive -a ${addr}:${port} /etc/gogive.conf",
       require => Golang::Get['github.com/droyo/gogive'],
     }
