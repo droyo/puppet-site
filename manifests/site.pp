@@ -22,6 +22,6 @@ resources {'firewall':
 
 if $::productname == 'Droplet' {
   include roles::do_backend
-} else if $::blockdevice_sda_vendor == 'Google' {
+} elsif $::blockdevice_sda_vendor == 'Google' {
   include roles::gce_backend
 }

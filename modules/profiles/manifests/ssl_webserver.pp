@@ -1,9 +1,9 @@
 class profiles::ssl_webserver {  
 
-  class{'nginx':
+  class{'::nginx':
     dhparam_length => 2048,
   }
-  nginx::ssl_server{'root':
+  ::nginx::ssl_server{'root':
     server_name => 'aqwari.net www.aqwari.net',
     listen => 443,
     root => '/var/empty',

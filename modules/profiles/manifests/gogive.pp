@@ -1,5 +1,5 @@
 class profiles::gogive {  
-  class{'gogive':
+  class{'::gogive':
     port => 9265,
     paths => {
       '/exp/ndb' => 'git https://github.com/droyo/go.ndb',

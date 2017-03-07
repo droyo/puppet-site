@@ -1,6 +1,6 @@
 class profiles::blog {  
-  include hugo
-  nginx::ssl_server{'blog':
+  include ::hugo
+  ::nginx::ssl_server{'blog':
     server_name => 'blog.aqwari.net',
     listen => 443,
     root => '/srv/hugo/public',
@@ -15,7 +15,7 @@ class profiles::blog {
     group    => 'hugo',
     provider => 'git',
     source   => 'git://github.com/droyo/blog.git',
-    require  => Class['hugo::user'],
+    require  => Class['::hugo::user'],
   }
   
   Vcsrepo['/srv/hugo'] -> Class['hugo']

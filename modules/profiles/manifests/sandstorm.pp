@@ -1,5 +1,5 @@
 class sandstorm {
-  nginx::ssl_server{'sandstorm':
+  ::nginx::ssl_server{'sandstorm':
     listen => 443,
     server_name => '*.aqwari.net *.aqwari.us',
     ssl_certificate => '/etc/ssl/certs/nginx.pem',

@@ -1,6 +1,6 @@
 class profiles::webserver {  
-  include nginx
-  nginx::server{'root':
+  include ::nginx
+  ::nginx::server{'root':
     server_name => 'aqwari.net www.aqwari.net',
     listen => 80,
     root => '/var/empty',
