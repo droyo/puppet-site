@@ -4,6 +4,11 @@ server {
 
     root <%= @root %>;
 
+    # Redirect to https if behind GCE LB
+    if ($http_x_forwarded_proto = "http") {
+      return 301 https://$host$request_uri;
+    }
+
 <% if @client_body_max_size -%>
     client_max_body_size <%= @client_body_max_size %>;
 <% end -%>
