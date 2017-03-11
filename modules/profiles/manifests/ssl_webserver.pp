@@ -22,7 +22,7 @@ class profiles::ssl_webserver {
     ssl_trusted_certificate => '/etc/ssl/certs/nginx-chain.pem',
     locations => {
       '= /_health' => '
-          return 204;',
+          return 200;',
       '= /artifactory-dircp' => '
           return 301 $scheme://blog.aqwari.net$request_uri;',
       '= /plumber-puppet' => '
