@@ -5,6 +5,8 @@ class profiles::webserver {
     listen => 80,
     root => '/var/empty',
     locations => {
+      '= /_health' => '
+          return 204;',
       '= /artifactory-dircp' => '
           return 301 $scheme://blog.aqwari.net$request_uri;',
       '= /plumber-puppet' => '
