@@ -4,7 +4,7 @@ define golang::get($binary = regsubst($name, '.*/', '')) {
   
   exec {"${golang::path}/bin/go get ${name}":
     environment => [
-        "GOPATH=${golang::path}",
+        "GOPATH=${golang::gopath}",
         "GOBIN=/usr/local/bin",
     ],
     logoutput => on_failure,

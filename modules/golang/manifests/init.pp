@@ -6,6 +6,11 @@ class golang {
   $uri = "https://storage.googleapis.com/golang/${tarball}"
 
   $path = '/usr/local/go'
+  $gopath = '/usr/local/gopath'
+
+  file{$gopath:
+    ensure => directory,
+  }
 
   package{'golang':
     ensure => absent,
