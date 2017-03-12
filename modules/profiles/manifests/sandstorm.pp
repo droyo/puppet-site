@@ -1,4 +1,4 @@
-class sandstorm {
+class profiles::sandstorm {
   ::nginx::ssl_server{'sandstorm':
     listen => 443,
     server_name => '*.aqwari.net *.aqwari.us',

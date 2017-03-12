@@ -28,6 +28,6 @@ class golang {
   } ->
   file{'/usr/bin/go':
     ensure => link,
-    target => "${path}/bin",
+    target => "${path}/bin/go",
   }
 }

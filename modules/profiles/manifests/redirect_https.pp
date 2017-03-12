@@ -1,4 +1,4 @@
-class profiles::redirect_http {  
+class profiles::redirect_https {
   ::nginx::redirect{'https':
     root => '/var/empty',
     listen => 80,
