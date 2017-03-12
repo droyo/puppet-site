@@ -9,8 +9,10 @@ class profiles::blog_gcs {
     provider => 'git',
     source   => 'git://github.com/droyo/blog.git',
     require  => Class['::hugo::user'],
+  } ~>
+  exec{'apt-get update':
+    refreshonly => true,
   } ->
-
   gcsfuse::mount{'/srv/hugo/public':
     user   => 'hugo',
     bucket => 'blog.aqwari.net',
