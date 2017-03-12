@@ -18,8 +18,8 @@ class golang {
     cwd     => $path,
   } ->
   exec{"tar --strip=1 -xzf '${tarball}'":
-    cwd    => $path,
-    onlyif => "test '${tarball}' -nt VERSION",
+    cwd     => $path,
+    creates => "${path}/VERSION",
   } ->
   file{'/usr/bin/go':
     ensure => link,
