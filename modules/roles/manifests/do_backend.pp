@@ -1,10 +1,7 @@
 class roles::do_backend {  
   include base
   include firewall
-  
-  class{'golang':
-    path => '/usr/local/go',
-  }
+  include golang
   
   include profiles::gogive
   include profiles::redirect_https

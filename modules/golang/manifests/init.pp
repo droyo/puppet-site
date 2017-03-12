@@ -17,7 +17,7 @@ class golang {
     creates => "${path}/${tarball}",
     cwd     => $path,
   } ->
-  exec{"/bin/tar --strip=1 -xzf '${tarball}'"
+  exec{"/bin/tar --strip=1 -xzf '${tarball}'":
     cwd    => $path,
     onlyif => "/bin/test '${tarball}' -nt VERSION",
   } ->
