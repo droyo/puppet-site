@@ -7,5 +7,5 @@ class roles::gce_backend {
 
   # Using preemptible instances, don't last longer than 24 hrs. No point running
   # the puppet agent.
-  service{'puppet': ensure => stopped, enabled => false }
+  service{'puppet': ensure => stopped, enable => false }
 }
