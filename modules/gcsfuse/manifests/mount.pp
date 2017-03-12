@@ -7,6 +7,9 @@ define gcsfuse::mount(
   if $user {
     User<|title == $user|> -> Exec["gcsfuse mount ${name}"]
   }
+  exec{"/bin/mkdir -p '${mountpoint}'":
+    creates => $mountpoint,
+  } ->
   exec{"gcsfuse mount ${name}":
     command => "/usr/bin/gcsfuse '${bucket}' '${mountpoint}'",
     user    => $user,
