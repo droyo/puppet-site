@@ -13,13 +13,13 @@ class golang {
   file{$path:
     ensure => directory,
   } ->
-  exec{"/usr/bin/curl -O '${uri}'":
+  exec{"curl -O '${uri}'":
     creates => "${path}/${tarball}",
     cwd     => $path,
   } ->
-  exec{"/bin/tar --strip=1 -xzf '${tarball}'":
+  exec{"tar --strip=1 -xzf '${tarball}'":
     cwd    => $path,
-    onlyif => "/bin/test '${tarball}' -nt VERSION",
+    onlyif => "test '${tarball}' -nt VERSION",
   } ->
   file{'/usr/bin/go':
     ensure => link,
