@@ -18,4 +18,5 @@ class profiles::blog_gcs {
 
   Vcsrepo['/srv/hugo'] -> Class['::hugo']
   Vcsrepo['/srv/hugo'] -> Gcsfuse::Mount['/srv/hugo/public']
+  Gcsfuse::Mount['/srv/hugo/public'] -> Class['::hugo::service']
 }
