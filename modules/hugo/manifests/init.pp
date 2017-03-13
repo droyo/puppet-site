@@ -20,7 +20,8 @@ class hugo ($basedir = '/srv/www') {
     command => '/bin/sh -c "cd /srv/hugo && git pull origin master 2>&1| logger -t hugo"',
     user    => 'hugo',
   }
+  include hugo::package
   
-  golang::get{'github.com/spf13/hugo':}
+  Class['hugo::package'] -> Class['hugo::service']
   include hugo::service
 }
