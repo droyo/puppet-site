@@ -7,7 +7,7 @@ class hugo::service {
       umask => '002',
       directory => '/srv/hugo',
       respawn => true,
-      command => '/usr/local/bin/hugo --watch',
+      command => 'hugo --watch',
       require => File['/srv/www', '/srv/hugo'],
     }
   } else {
@@ -18,7 +18,7 @@ class hugo::service {
       group => 'web',
       umask => '002',
       directory => '/srv/hugo',
-      command => '/usr/local/bin/hugo --watch',
+      command => 'hugo --watch',
       require => File['/srv/www', '/srv/hugo'],
     }
   }
