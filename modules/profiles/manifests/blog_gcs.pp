@@ -11,7 +11,7 @@ class profiles::blog_gcs {
   }
   cron{'upload blog to GCS bucket':
     minute  => fqdn_rand(60),
-    command => '/bin/sh -c "gsutil -m cp -r /srv/hugo/public/* gs://blog.aqwari.net"',
+    command => '/bin/sh -c "gsutil -m rsync -d -r /srv/hugo/public/ gs://blog.aqwari.net/"',
     user    => 'hugo',
   }
   Vcsrepo['/srv/hugo'] -> Class['::hugo']
