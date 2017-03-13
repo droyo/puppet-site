@@ -11,7 +11,6 @@ class hugo::package {
       creates => "/var/cache/apt/archives/${pkgname}",
     } ->
     package{'hugo':
-      ensure => '0.17',
       source => "/var/cache/apt/archives/${pkgname}",
       provider => dpkg,
     }
