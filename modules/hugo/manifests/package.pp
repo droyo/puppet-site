@@ -13,6 +13,7 @@ class hugo::package {
     package{'hugo':
       ensure => '0.17',
       source => "/var/cache/apt/archives/${pkgname}",
+      provider => dpkg,
     }
   } else {
     golang::get{'github.com/spf13/hugo':}
