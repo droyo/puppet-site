@@ -6,7 +6,7 @@ class hugo::package {
     exec{'mkdir -p /var/cache/apt/archives':
       creates => '/var/cache/apt/archives',
     } ->
-    exec{"curl -O '${pkgurl}'":
+    exec{"curl -L -O '${pkgurl}'":
       cwd => '/var/cache/apt/archives',
       creates => "/var/cache/apt/archives/${pkgname}",
     } ->
