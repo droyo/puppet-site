@@ -11,7 +11,7 @@ define systemd::service(
   $umask       = '022',
 ) {
   if $::osfamily == 'Debian' {
-    if versioncmp($::operatingsystemrelease, 9) < 0 {
+    if versioncmp($::operatingsystemrelease, '9') < 0 {
       $basedir = '/usr/lib/systemd'
     } else {
       $basedir = '/etc/systemd'
