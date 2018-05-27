@@ -11,7 +11,7 @@ class profiles::ssl_webserver {
     source => 'puppet:///modules/base/private/nginx.pem',
   }
   class{'::nginx':
-    dhparam_length => 2048,
+    dhparam_length => 4096,
   }
   ::nginx::ssl_server{'root':
     server_name => 'aqwari.net www.aqwari.net',
