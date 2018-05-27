@@ -22,7 +22,7 @@ define systemd::service(
   file{"${basedir}/system/${name}.service":
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0644',
     content => template('systemd/service.erb'),
   } ~>
   service{$name:
