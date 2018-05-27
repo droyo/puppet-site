@@ -1,5 +1,5 @@
 class hugo::service {
-  if $::osfamily == 'Debian' and versioncmp($::operatingsystemrelease, 8) < 0 {
+  if $::osfamily == 'Debian' and versioncmp($::operatingsystemrelease, '8') < 0 {
     upstart::service {'hugo':
       ensure => running,
       user => 'hugo',

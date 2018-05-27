@@ -10,7 +10,16 @@ define systemd::service(
   $respawn     = false,
   $umask       = '022',
 ) {
-  file{"/usr/lib/systemd/system/${name}.service":
+  if $::osfamily == 'Debian' {
+    if versioncmp($::operatingsystemrelease, 9) < 0 {
+      $basedir = '/usr/lib/systemd'
+    } else {
+      $basedir = '/etc/systemd'
+    }
+  } else {
+    $basedir = '/usr/lib/systemd'
+  }
+  file{"${basedir}/system/${name}.service":
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
@@ -23,9 +32,9 @@ define systemd::service(
   
   # Autorequire user/group resources.
   if $user {
-    User<|title == $user|> -> File["/usr/lib/systemd/system/${name}.service"]
+    User<|title == $user|> -> File["${basedir}/system/${name}.service"]
   }
   if $group {
-    Group<|title == $group|> -> File["/usr/lib/systemd/system/${name}.service"]
+    Group<|title == $group|> -> File["${basedir}/system/${name}.service"]
   }
 }

@@ -16,7 +16,7 @@ define webhook::hook(
     action => accept,
   }
 
-  if $::osfamily == 'Debian' and versioncmp($::operatingsystemrelease, 8) < 0 {
+  if $::osfamily == 'Debian' and versioncmp($::operatingsystemrelease, '8') < 0 {
     upstart::service{"webhook-${name}":
       desc  => 'Github webhook receiver for $name',
       user  => $user,
