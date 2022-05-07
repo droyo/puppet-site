@@ -6,7 +6,7 @@ class profiles::blog_gcs {
     owner    => 'hugo',
     group    => 'hugo',
     provider => 'git',
-    source   => 'git://github.com/droyo/blog.git',
+    source   => 'https://github.com/droyo/blog.git',
     require  => Class['::hugo::user'],
   }
   cron{'upload blog to GCS bucket':
