@@ -1,7 +1,8 @@
 class hugo::user {
   user {'hugo':
-    shell => '/bin/false',
+    shell => '/usr/sbin/nologin',
     tag => 'web',
+    managehome => true,
   }
   group {'hugo':}
 }
